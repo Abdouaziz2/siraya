@@ -1,0 +1,37 @@
+# Documents confidentiels et specifications
+Analyse et conception etc/
+*.docx
+*.pdf
+Nouveau dossier/
+images/
+
+# Fichiers lies aux agents et configuration IA
+Agent.md
+*.agent.md
+.gemini/
+.system_generated/
+scratch/
+
+# IDE et OS
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Flutter & Dart
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+
+# Spring Boot & Java
+**/target/
+**/*.class
+**/*.jar
+**/*.war
+
+# Logs
+*.log

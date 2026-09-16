@@ -1,0 +1,35 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    name: ${DB_NAME:siraya-db}
+    host: ${DB_HOST:127.0.0.1}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${spring.datasource.host}:3306/${spring.datasource.name}?createDatabaseIfNotExist=true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+  application:
+    name: siraya
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+siraya:
+  auth:
+    otp-expiration-minutes: ${OTP_EXPIRATION_MINUTES:5}
+    otp-max-attempts: ${OTP_MAX_ATTEMPTS:3}
+    token-secret: ${TOKEN_SECRET:change-this-secret}
+    token-expiration-seconds: ${TOKEN_EXPIRATION_SECONDS:86400}
