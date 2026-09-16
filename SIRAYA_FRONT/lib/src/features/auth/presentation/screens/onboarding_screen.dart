@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nioudem/src/core/theme/siraya_colors.dart';
-import 'package:nioudem/src/features/auth/presentation/screens/create_pin_screen.dart';
+import 'package:nioudem/src/features/search/presentation/screens/search_home_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -25,7 +25,7 @@ class OnboardingScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () => _goToRegistration(context),
+                          onPressed: () => _goToHome(context),
                           child: const Text(
                             'Passer',
                             style: TextStyle(
@@ -80,7 +80,7 @@ class OnboardingScreen extends StatelessWidget {
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
-                          onPressed: () => _goToRegistration(context),
+                          onPressed: () => _goToHome(context),
                           child: const Text(
                             'Suivant',
                             style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
@@ -98,9 +98,9 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 
-  void _goToRegistration(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const CreatePinScreen()),
+  void _goToHome(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const SearchHomeScreen()),
     );
   }
 }

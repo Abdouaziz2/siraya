@@ -55,7 +55,14 @@ class SirayaPrimaryButton extends StatelessWidget {
                     Icon(icon, size: 20),
                     const SizedBox(width: SirayaSpacing.xs),
                   ],
-                  Text(label, style: SirayaTypography.button),
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: SirayaTypography.button,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
       ),
@@ -100,9 +107,13 @@ class SirayaSecondaryButton extends StatelessWidget {
               Icon(icon, size: 20),
               const SizedBox(width: SirayaSpacing.xs),
             ],
-            Text(
-              label,
-              style: SirayaTypography.button.copyWith(color: SirayaColors.green),
+            Flexible(
+              child: Text(
+                label,
+                style: SirayaTypography.button.copyWith(color: SirayaColors.green),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),
