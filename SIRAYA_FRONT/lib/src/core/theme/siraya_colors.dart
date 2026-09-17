@@ -6,7 +6,7 @@ abstract class SirayaColors {
   // Couleurs Identitaires de Marque
   static const Color green = Color(0xFF004B2F);       // Vert forêt identitaire
   static const Color darkGreen = Color(0xFF003820);   // Vert très sombre (Header, Contraste)
-  static const Color orange = Color(0xFFFF7900);      // Orange vif d'action
+  static const Color orange = Color(0xFFF47B20);      // Orange identitaire SIRAYA officiel
   static const Color darkOrange = Color(0xFFC85A00);  // Orange soutenu pour contraste texte (WCAG AA)
 
   // Couleurs de Surface & Arrière-plans

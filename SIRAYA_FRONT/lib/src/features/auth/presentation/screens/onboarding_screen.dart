@@ -71,19 +71,29 @@ class OnboardingScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       const _PageDots(),
                       const SizedBox(height: 20),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: SirayaColors.orange,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          ),
-                          onPressed: () => _goToHome(context),
-                          child: const Text(
-                            'Suivant',
-                            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+                      Center(
+                        child: SizedBox(
+                          width: (constraints.maxWidth * 0.70).clamp(220.0, 275.0),
+                          height: 50,
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: SirayaColors.orange,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                            ),
+                            onPressed: () => _goToHome(context),
+                            child: const Text(
+                              'Suivant',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.2,
+                              ),
+                            ),
                           ),
                         ),
                       ),
