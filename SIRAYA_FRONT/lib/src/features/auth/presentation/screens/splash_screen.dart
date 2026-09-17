@@ -11,7 +11,7 @@ class SplashScreen extends StatelessWidget {
     final size = MediaQuery.sizeOf(context);
     final horizontalPadding = size.width < 380 ? 20.0 : 26.0;
     final logoWidth = size.width < 380 ? 220.0 : 258.0;
-    final buttonHeight = size.height < 700 ? 60.0 : 74.0;
+    const buttonHeight = 50.0;
 
     return Scaffold(
       body: Stack(
@@ -29,6 +29,7 @@ class SplashScreen extends StatelessWidget {
                 final responsiveLogoWidth = compact ? 168.0 : logoWidth;
                 final topSpacing = compact ? 14.0 : constraints.maxHeight * 0.15;
                 final middleSpacing = compact ? 28.0 : constraints.maxHeight * 0.26;
+                final responsiveButtonWidth = (constraints.maxWidth * 0.72).clamp(230.0, 270.0);
 
                 return SingleChildScrollView(
                   child: ConstrainedBox(
@@ -56,6 +57,7 @@ class SplashScreen extends StatelessWidget {
                           _StartButton(
                             label: 'Commencer',
                             filled: true,
+                            width: responsiveButtonWidth,
                             height: buttonHeight,
                             onPressed: () {
                               Navigator.of(context).push(
@@ -63,10 +65,11 @@ class SplashScreen extends StatelessWidget {
                               );
                             },
                           ),
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 12),
                           _StartButton(
                             label: 'Se connecter',
                             filled: false,
+                            width: responsiveButtonWidth,
                             height: buttonHeight,
                             onPressed: () {
                               Navigator.of(context).push(
@@ -152,49 +155,53 @@ class _StartButton extends StatelessWidget {
     required this.label,
     required this.filled,
     required this.height,
+    this.width,
     required this.onPressed,
   });
 
   final String label;
   final bool filled;
   final double height;
+  final double? width;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: width,
       height: height,
       child: filled
           ? FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: SirayaColors.green,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
               ),
               onPressed: onPressed,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     label,
-                    style: TextStyle(fontSize: height < 70 ? 20 : 24, fontWeight: FontWeight.w800),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   ),
-                  const SizedBox(width: 20),
-                  Icon(Icons.arrow_forward, size: height < 70 ? 28 : 34),
+                  const SizedBox(width: 10),
+                  const Icon(Icons.arrow_forward, size: 20),
                 ],
               ),
             )
           : OutlinedButton(
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.white,
-                side: const BorderSide(color: Colors.white, width: 2),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                side: const BorderSide(color: Colors.white, width: 1.5),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
               ),
               onPressed: onPressed,
               child: Text(
                 label,
-                style: TextStyle(fontSize: height < 70 ? 20 : 24, fontWeight: FontWeight.w800),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
             ),
     );

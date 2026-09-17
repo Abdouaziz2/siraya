@@ -37,12 +37,15 @@ class OnboardingScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: (constraints.maxHeight * 0.36).clamp(180.0, 260.0),
+                        width: double.infinity,
+                        height: (constraints.maxHeight * 0.34).clamp(190.0, 250.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.asset(
                             'assets/images/onboarding_map_bus.png',
-                            fit: BoxFit.contain,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
                           ),
                         ),
                       ),
@@ -73,7 +76,7 @@ class OnboardingScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       Center(
                         child: SizedBox(
-                          width: (constraints.maxWidth * 0.70).clamp(220.0, 275.0),
+                          width: (constraints.maxWidth * 0.58).clamp(190.0, 225.0),
                           height: 50,
                           child: FilledButton(
                             style: FilledButton.styleFrom(
