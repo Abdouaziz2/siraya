@@ -63,27 +63,29 @@ class _SearchHomeScreenState extends State<SearchHomeScreen> {
               children: [
                 // Image Hero Bannière
                 Container(
-                  height: 230,
+                  height: 265,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: SirayaColors.darkGreen,
                     borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(SirayaSpacing.radiusXl),
+                      bottom: Radius.circular(SirayaSpacing.radiusLg),
                     ),
                   ),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.circular(SirayaSpacing.radiusXl),
+                      bottom: Radius.circular(SirayaSpacing.radiusLg),
                     ),
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
                         Image.asset(
                           'assets/images/hero_baniere.png',
+                          alignment: const Alignment(0, -0.25),
                           fit: BoxFit.cover,
                           errorBuilder: (_, _, _) {
                             return Image.asset(
                               'assets/images/bus_hero.png',
+                              alignment: const Alignment(0, -0.25),
                               fit: BoxFit.cover,
                               errorBuilder: (_, _, _) => const SizedBox.shrink(),
                             );
@@ -97,8 +99,8 @@ class _SearchHomeScreenState extends State<SearchHomeScreen> {
                               end: Alignment.bottomCenter,
                               colors: [
                                 SirayaColors.darkGreen.withValues(alpha: 0.82),
-                                SirayaColors.darkGreen.withValues(alpha: 0.55),
-                                SirayaColors.green.withValues(alpha: 0.92),
+                                SirayaColors.darkGreen.withValues(alpha: 0.45),
+                                SirayaColors.green.withValues(alpha: 0.90),
                               ],
                             ),
                           ),
@@ -193,9 +195,9 @@ class _SearchHomeScreenState extends State<SearchHomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Formulaire de recherche (en léger chevauchement ou sous l'en-tête)
+                  // Formulaire de recherche (posé élégamment sous l'en-tête)
                   Transform.translate(
-                    offset: const Offset(0, -22),
+                    offset: const Offset(0, -16),
                     child: RouteSelectorCard(
                       key: _cardKey,
                       initialQuery: _query,

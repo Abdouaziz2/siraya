@@ -35,24 +35,24 @@ class OnboardingScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 14),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: AspectRatio(
-                          aspectRatio: 0.86,
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: (constraints.maxHeight * 0.36).clamp(180.0, 260.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
                           child: Image.asset(
                             'assets/images/onboarding_map_bus.png',
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
                       const Text(
                         'Trouvez les meilleurs départs facilement',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: SirayaColors.darkGreen,
-                          fontSize: 24,
+                          fontSize: 22,
                           height: 1.15,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 0,
@@ -68,12 +68,12 @@ class OnboardingScreen extends StatelessWidget {
                           height: 1.35,
                         ),
                       ),
-                      const SizedBox(height: 22),
+                      const SizedBox(height: 16),
                       const _PageDots(),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
-                        height: 58,
+                        height: 52,
                         child: FilledButton(
                           style: FilledButton.styleFrom(
                             backgroundColor: SirayaColors.orange,
