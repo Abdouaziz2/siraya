@@ -23,48 +23,55 @@ class SirayaPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: fullWidth ? double.infinity : null,
-      height: SirayaSpacing.buttonHeight,
-      child: FilledButton(
-        style: FilledButton.styleFrom(
-          backgroundColor: SirayaColors.orange,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: SirayaColors.border,
-          disabledForegroundColor: SirayaColors.textMuted,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(SirayaSpacing.radiusSm),
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: fullWidth ? double.infinity : 0,
+        minHeight: SirayaSpacing.buttonHeight,
+      ),
+      child: Semantics(
+        button: true,
+        liveRegion: loading,
+        label: loading ? '$label, chargement en cours' : label,
+        child: FilledButton(
+          style: FilledButton.styleFrom(
+            backgroundColor: SirayaColors.orange,
+            foregroundColor: Colors.white,
+            disabledBackgroundColor: SirayaColors.border,
+            disabledForegroundColor: SirayaColors.textMuted,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(SirayaSpacing.radiusSm),
+            ),
+            elevation: 0,
           ),
-          elevation: 0,
-        ),
-        onPressed: loading ? null : onPressed,
-        child: loading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.2,
-                  color: Colors.white,
-                ),
-              )
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, size: 20),
-                    const SizedBox(width: SirayaSpacing.xs),
-                  ],
-                  Flexible(
-                    child: Text(
-                      label,
-                      style: SirayaTypography.button,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+          onPressed: loading ? null : onPressed,
+          child: loading
+              ? const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.2,
+                    color: Colors.white,
                   ),
-                ],
-              ),
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (icon != null) ...[
+                      Icon(icon, size: 20),
+                      const SizedBox(width: SirayaSpacing.xs),
+                    ],
+                    Flexible(
+                      child: Text(
+                        label,
+                        style: SirayaTypography.button,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }

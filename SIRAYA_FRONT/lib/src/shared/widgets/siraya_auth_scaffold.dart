@@ -41,7 +41,10 @@ class SirayaAuthScaffold extends StatelessWidget {
                   Text(
                     subtitle,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: SirayaColors.muted, fontSize: 14),
+                    style: const TextStyle(
+                      color: SirayaColors.muted,
+                      fontSize: 14,
+                    ),
                   ),
                   const SizedBox(height: 22),
                   Container(
@@ -49,7 +52,9 @@ class SirayaAuthScaffold extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+                      border: Border.all(
+                        color: Colors.black.withValues(alpha: 0.05),
+                      ),
                     ),
                     child: child,
                   ),

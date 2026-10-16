@@ -1,45 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:nioudem/src/core/theme/siraya_colors.dart';
 
 class SirayaLogo extends StatelessWidget {
-  const SirayaLogo({super.key, required this.size, this.dark = false});
+  const SirayaLogo({
+    super.key,
+    this.size,
+    double? width,
+    this.height,
+    this.dark = false,
+  }) : width = width ?? size ?? 180;
 
-  final double size;
+  final double? size;
+  final double width;
+  final double? height;
   final bool dark;
 
   @override
   Widget build(BuildContext context) {
-    final color = dark ? SirayaColors.green : Colors.white;
-    return SizedBox(
-      width: size,
-      height: size,
+    return Semantics(
+      label: 'Logo SIRAYA',
+      image: true,
       child: Image.asset(
-        'assets/images/siraya_logo_transparent.png',
+        'assets/images/siraya_logo.png',
+        width: width,
+        height: height ?? size,
         fit: BoxFit.contain,
         errorBuilder: (context, error, stackTrace) {
+          // Fallback sur le logo transparent existant si siraya_logo.png n'est pas encore copié
           return Image.asset(
-            'assets/images/siraya_logo.png',
+            'assets/images/siraya_logo_transparent.png',
+            width: width,
+            height: height ?? size,
             fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: color.withValues(alpha: 0.2), width: 1.4),
-                ),
-                child: Center(
-                  child: Text(
-                    'S',
-                    style: TextStyle(
-                      color: color,
-                      fontSize: size * 0.62,
-                      fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic,
-                      letterSpacing: 0,
-                    ),
-                  ),
-                ),
-              );
-            },
           );
         },
       ),

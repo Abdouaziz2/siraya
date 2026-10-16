@@ -3,7 +3,7 @@ Analyse et conception etc/
 *.docx
 *.pdf
 Nouveau dossier/
-images/
+/images/
 
 # Fichiers lies aux agents et configuration IA
 Agent.md

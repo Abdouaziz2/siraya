@@ -1,81 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nioudem/src/core/theme/siraya_colors.dart';
 
-/// Échelle Typographique SIRAYA.
-/// Conçue pour une lisibilité optimale sur petits écrans (360dp) et en plein soleil.
+/// Échelle Typographique SIRAYA (Plus Jakarta Sans).
 abstract class SirayaTypography {
-  // Grands Titres & En-têtes (Hero, Splash)
-  static const TextStyle displayLarge = TextStyle(
+  // Grands Titres & Hero
+  static TextStyle get displayLarge => GoogleFonts.plusJakartaSans(
     fontSize: 28,
     fontWeight: FontWeight.w800,
-    letterSpacing: -0.5,
+    letterSpacing: -0.6,
     height: 1.2,
     color: SirayaColors.textPrimary,
   );
 
-  static const TextStyle headlineMedium = TextStyle(
+  static TextStyle get headlineMedium => GoogleFonts.plusJakartaSans(
     fontSize: 22,
     fontWeight: FontWeight.w700,
-    letterSpacing: -0.3,
+    letterSpacing: -0.4,
     height: 1.25,
     color: SirayaColors.textPrimary,
   );
 
   // Titres de sections & Cartes de voyage
-  static const TextStyle titleLarge = TextStyle(
+  static TextStyle get titleLarge => GoogleFonts.plusJakartaSans(
     fontSize: 18,
     fontWeight: FontWeight.w700,
-    height: 1.3,
+    letterSpacing: -0.2,
     color: SirayaColors.textPrimary,
   );
 
-  static const TextStyle titleMedium = TextStyle(
+  static TextStyle get titleMedium => GoogleFonts.plusJakartaSans(
     fontSize: 16,
     fontWeight: FontWeight.w600,
-    height: 1.35,
     color: SirayaColors.textPrimary,
   );
 
   // Corps de texte
-  static const TextStyle bodyLarge = TextStyle(
+  static TextStyle get bodyLarge => GoogleFonts.plusJakartaSans(
     fontSize: 15,
     fontWeight: FontWeight.w400,
     height: 1.45,
     color: SirayaColors.textPrimary,
   );
 
-  static const TextStyle bodyMedium = TextStyle(
+  static TextStyle get bodyMedium => GoogleFonts.plusJakartaSans(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.4,
     color: SirayaColors.textSecondary,
   );
 
-  static const TextStyle bodySmall = TextStyle(
+  static TextStyle get bodySmall => GoogleFonts.plusJakartaSans(
     fontSize: 12,
     fontWeight: FontWeight.w400,
-    height: 1.35,
     color: SirayaColors.textMuted,
   );
 
-  // Labels, Boutons, Badges
-  static const TextStyle button = TextStyle(
+  // Boutons, Badges, Prix
+  static TextStyle get button => GoogleFonts.plusJakartaSans(
     fontSize: 15,
     fontWeight: FontWeight.w700,
     letterSpacing: 0.2,
     color: Colors.white,
   );
 
-  static const TextStyle badge = TextStyle(
+  static TextStyle get badge => GoogleFonts.plusJakartaSans(
     fontSize: 11,
     fontWeight: FontWeight.w700,
     letterSpacing: 0.3,
   );
 
-  static const TextStyle price = TextStyle(
-    fontSize: 18,
+  static TextStyle get price => GoogleFonts.plusJakartaSans(
+    fontSize: 19,
     fontWeight: FontWeight.w800,
-    letterSpacing: -0.2,
+    letterSpacing: -0.3,
     color: SirayaColors.green,
   );
 }

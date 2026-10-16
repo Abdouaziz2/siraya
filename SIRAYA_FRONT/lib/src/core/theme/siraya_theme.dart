@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nioudem/src/core/theme/siraya_colors.dart';
 import 'package:nioudem/src/core/theme/siraya_spacing.dart';
 import 'package:nioudem/src/core/theme/siraya_typography.dart';
@@ -8,8 +9,8 @@ class SirayaTheme {
   static ThemeData light() {
     final base = ThemeData(
       useMaterial3: true,
-      fontFamily: 'Roboto',
       scaffoldBackgroundColor: SirayaColors.background,
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(),
       colorScheme: ColorScheme.fromSeed(
         seedColor: SirayaColors.green,
         primary: SirayaColors.green,
@@ -24,16 +25,12 @@ class SirayaTheme {
     );
 
     return base.copyWith(
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: SirayaColors.green,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-        ),
+        titleTextStyle: SirayaTypography.titleLarge.copyWith(color: Colors.white),
       ),
       cardTheme: CardThemeData(
         color: SirayaColors.surface,
