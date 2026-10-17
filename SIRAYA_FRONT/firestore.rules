@@ -1,0 +1,39 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Profils utilisateurs
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Trajets de bus disponibles (Lecture publique pour la recherche)
+    match /trips/{tripId} {
+      allow read: if true;
+      allow write: if false; // Modifiable uniquement via backend / console admin
+    }
+
+    // Compagnies de transport partenaires
+    match /companies/{companyId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Réservations de billets
+    match /bookings/{bookingId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid);
+      allow create: if isAuthenticated() && (request.resource.data.userId == request.auth.uid);
+      allow update, delete: if false; // Inviolabilité du billet par le client
+    }
+  }
+}

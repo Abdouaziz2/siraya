@@ -11,6 +11,8 @@ Agent.md
 .gemini/
 .system_generated/
 scratch/
+.agents/
+.backup_images/
 
 # IDE et OS
 .vscode/

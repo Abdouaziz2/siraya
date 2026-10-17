@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1090481693624",
+    "project_id": "siraya-3318c",
+    "storage_bucket": "siraya-3318c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090481693624:android:e494499465cae27e76254d",
+        "android_client_info": {
+          "package_name": "com.example.nioudem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS05fsUHqf_QqsdCqVI19DFQZdxjfNuKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

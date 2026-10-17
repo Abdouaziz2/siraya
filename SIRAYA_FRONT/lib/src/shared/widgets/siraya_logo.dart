@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:nioudem/src/core/theme/siraya_colors.dart';
 
 class SirayaLogo extends StatelessWidget {
   const SirayaLogo({
@@ -16,23 +18,29 @@ class SirayaLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveHeight = height ?? size ?? 32;
     return Semantics(
       label: 'Logo SIRAYA',
-      image: true,
-      child: Image.asset(
-        'assets/images/siraya_logo.png',
-        width: width,
-        height: height ?? size,
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) {
-          // Fallback sur le logo transparent existant si siraya_logo.png n'est pas encore copié
-          return Image.asset(
-            'assets/images/siraya_logo_transparent.png',
-            width: width,
-            height: height ?? size,
-            fit: BoxFit.contain,
-          );
-        },
+      child: RichText(
+        text: TextSpan(
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: (effectiveHeight * 0.75).clamp(16.0, 48.0),
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.5,
+          ),
+          children: [
+            TextSpan(
+              text: 'Sira',
+              style: TextStyle(
+                color: dark ? Colors.white : SirayaColors.green,
+              ),
+            ),
+            const TextSpan(
+              text: 'ya',
+              style: TextStyle(color: SirayaColors.orange),
+            ),
+          ],
+        ),
       ),
     );
   }
