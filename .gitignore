@@ -13,6 +13,7 @@ Agent.md
 scratch/
 .agents/
 .backup_images/
+.backup_spring_backend/
 
 # IDE et OS
 .vscode/
