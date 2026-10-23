@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nioudem/src/core/theme/siraya_colors.dart';
 import 'package:nioudem/src/core/theme/siraya_theme.dart';
-import 'package:nioudem/src/shared/widgets/siraya_logo.dart';
+import 'package:nioudem/src/features/auth/presentation/screens/splash_screen.dart';
 
 class SirayaApp extends StatelessWidget {
   const SirayaApp({super.key});
@@ -12,12 +11,7 @@ class SirayaApp extends StatelessWidget {
       title: 'SIRAYA',
       debugShowCheckedModeBanner: false,
       theme: SirayaTheme.light(),
-      home: const Scaffold(
-        backgroundColor: SirayaColors.background,
-        body: Center(
-          child: SirayaLogo(size: 40),
-        ),
-      ),
+      home: const SplashScreen(),
     );
   }
 }

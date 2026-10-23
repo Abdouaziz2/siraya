@@ -6,6 +6,7 @@ abstract class SirayaColors {
   // Couleurs Identitaires issues du nouveau logo
   static const Color green = Color(0xFF134E35);       // Vert forêt route (S, i, r, a)
   static const Color darkGreen = Color(0xFF0C2F20);   // Vert très sombre (Header, Contraste)
+  static const Color splashGreen = Color(0xFF003C28); // Fond splash screen (Figma node 102:2)
   static const Color orange = Color(0xFFF27420);      // Orange identitaire vif (y, a, pin bus)
   static const Color darkOrange = Color(0xFFC6550A);  // Orange soutenu pour contraste texte
 
