@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nioudem/src/core/theme/siraya_spacing.dart';
-import 'package:nioudem/src/shared/widgets/siraya_badge.dart';
-import 'package:nioudem/src/shared/widgets/siraya_buttons.dart';
+import 'package:nioudem/core/theme/siraya_spacing.dart';
+import 'package:nioudem/presentation/widgets/siraya_badge.dart';
+import 'package:nioudem/presentation/widgets/siraya_buttons.dart';
 
 void main() {
   group('SIRAYA Design System Tokens & Widgets', () {
