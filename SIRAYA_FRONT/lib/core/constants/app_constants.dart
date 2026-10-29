@@ -17,5 +17,7 @@ abstract class AppConstants {
   // Assets
   static const String busAsset = 'assets/images/Image bus Siraya.png';
   static const String logoAsset = 'assets/images/Siraya-logo.png';
+  static const String logoWhiteAsset = 'assets/images/Siraya-logo.png';
+  static const String logoGreenAsset = 'assets/images/siraya_logo_green.png';
   static const String passengerAsset = 'assets/images/passenger_siraya.png';
 }

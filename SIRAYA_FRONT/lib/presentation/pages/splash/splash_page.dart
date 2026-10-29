@@ -49,7 +49,7 @@ class _SplashPageState extends State<SplashPage> {
           children: [
             // ── Logo ────────────────────────────────────────────────────
             const SizedBox(height: SirayaSpacing.xxxl),
-            const SirayaLogo(size: 48, dark: true),
+            const SirayaLogo(height: 52, dark: true),
 
             // ── Slogan ──────────────────────────────────────────────────
             const SizedBox(height: SirayaSpacing.xl),
