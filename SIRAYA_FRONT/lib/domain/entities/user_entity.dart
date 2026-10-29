@@ -16,3 +16,4 @@ class UserEntity {
   final String? photoUrl;
   final bool isVerified;
 }
+

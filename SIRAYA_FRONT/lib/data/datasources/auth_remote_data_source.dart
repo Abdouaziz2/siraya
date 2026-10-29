@@ -128,3 +128,4 @@ class FirebaseAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (_) {}
   }
 }
+

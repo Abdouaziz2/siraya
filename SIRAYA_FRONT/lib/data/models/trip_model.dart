@@ -41,3 +41,4 @@ class TripModel extends TripEntity {
     'isAirConditioned': isAirConditioned,
   };
 }
+

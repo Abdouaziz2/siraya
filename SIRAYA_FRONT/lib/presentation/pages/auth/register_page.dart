@@ -27,3 +27,4 @@ class RegisterPage extends StatelessWidget {
     );
   }
 }
+

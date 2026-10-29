@@ -77,3 +77,4 @@ abstract class SirayaTypography {
     color: SirayaColors.green,
   );
 }
+

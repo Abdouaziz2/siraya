@@ -29,3 +29,4 @@ class SplashController extends ValueNotifier<SplashState> {
     value = const SplashCompleted(isAuthenticated: false);
   }
 }
+

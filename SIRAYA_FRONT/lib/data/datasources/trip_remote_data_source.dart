@@ -46,3 +46,4 @@ class FirestoreTripRemoteDataSourceImpl implements TripRemoteDataSource {
     return snapshot.docs.map(TripModel.fromFirestore).toList();
   }
 }
+

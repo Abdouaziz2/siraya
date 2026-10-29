@@ -17,3 +17,4 @@ class TripRepositoryImpl implements TripRepository {
     return _remoteDataSource.getPopularRoutes();
   }
 }
+

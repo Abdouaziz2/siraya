@@ -9,3 +9,4 @@ class SearchTripsUseCase {
     return _repository.searchTrips(query);
   }
 }
+

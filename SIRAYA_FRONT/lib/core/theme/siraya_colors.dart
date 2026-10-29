@@ -35,3 +35,4 @@ abstract class SirayaColors {
   // Rétrocompatibilité
   static const Color muted = Color(0xFF6D746F);
 }
+

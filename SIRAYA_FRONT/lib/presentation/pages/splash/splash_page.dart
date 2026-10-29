@@ -1,15 +1,42 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nioudem/core/constants/app_constants.dart';
 import 'package:nioudem/core/theme/siraya_colors.dart';
 import 'package:nioudem/core/theme/siraya_spacing.dart';
+import 'package:nioudem/presentation/pages/onboarding/onboarding_page.dart';
 import 'package:nioudem/presentation/widgets/siraya_logo.dart';
 
 /// Écran 1 — Splash Screen SIRAYA (Clean Architecture Presentation Page).
 ///
 /// Design Figma : fond #003C28, logo blanc+orange, slogan, bus centré, loader mint.
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(AppConstants.splashDuration, () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const OnboardingPage()),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,3 +149,4 @@ class _SplashLoader extends StatelessWidget {
     );
   }
 }
+

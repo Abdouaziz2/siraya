@@ -14,3 +14,4 @@ extension StringExtensions on String {
   /// Retourne null si la chaîne est vide, sinon la chaîne elle-même.
   String? get nullIfEmpty => trim().isEmpty ? null : this;
 }
+

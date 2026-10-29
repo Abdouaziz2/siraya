@@ -9,3 +9,4 @@ class SignInWithGoogleUseCase {
     return _repository.signInWithGoogle();
   }
 }
+

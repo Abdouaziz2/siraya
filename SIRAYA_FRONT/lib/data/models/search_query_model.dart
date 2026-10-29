@@ -18,3 +18,4 @@ class SearchQueryModel extends SearchQueryEntity {
     );
   }
 }
+

@@ -8,3 +8,4 @@ class SignOutUseCase {
     return _repository.signOut();
   }
 }
+

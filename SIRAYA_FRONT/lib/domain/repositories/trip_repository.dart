@@ -5,3 +5,4 @@ abstract class TripRepository {
   Future<List<TripEntity>> searchTrips(SearchQueryEntity query);
   Future<List<TripEntity>> getPopularRoutes();
 }
+

@@ -46,3 +46,4 @@ class AuthRepositoryImpl implements AuthRepository {
     return _remoteDataSource.signOut();
   }
 }
+

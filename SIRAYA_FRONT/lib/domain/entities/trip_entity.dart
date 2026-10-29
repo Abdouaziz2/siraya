@@ -37,3 +37,4 @@ class TripEntity {
   final int availableSeats;
   final bool isAirConditioned;
 }
+
