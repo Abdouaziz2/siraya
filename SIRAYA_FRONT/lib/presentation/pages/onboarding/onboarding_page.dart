@@ -4,22 +4,28 @@ import 'package:nioudem/core/constants/app_constants.dart';
 import 'package:nioudem/core/theme/siraya_colors.dart';
 import 'package:nioudem/core/theme/siraya_spacing.dart';
 import 'package:nioudem/presentation/pages/auth/phone_page.dart';
-import 'package:nioudem/presentation/widgets/siraya_buttons.dart';
 
-/// Modèle pour les étapes d'onboarding.
-class OnboardingStep {
-  const OnboardingStep({
-    required this.title,
+/// Données pour chaque étape d'onboarding.
+class OnboardingStepData {
+  const OnboardingStepData({
+    required this.titleWhite,
+    required this.titleOrange,
     required this.description,
-    required this.imageAsset,
   });
 
-  final String title;
+  final String titleWhite;
+  final String titleOrange;
   final String description;
-  final String imageAsset;
 }
 
-/// Écran Onboarding SIRAYA (Node Figma 32:10246).
+/// Écran d'Onboarding SIRAYA fidèle aux maquettes Figma (3 étapes).
+///
+/// Fond : #003C28 (vert forêt profond).
+/// Typographie : Plus Jakarta Sans (bicolore blanc + orange).
+/// Bouton Passer : Pilule sombre en haut à droite.
+/// Étape 1 : Bus réaliste.
+/// Étape 2 : Cartes de comparaison (SENECAR, ORABUS, MALI BUS).
+/// Étape 3 : Voyageur avec billet digital QR code.
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
 
@@ -31,21 +37,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  final List<OnboardingStep> _steps = const [
-    OnboardingStep(
-      title: 'Trouvez les meilleurs\ndéparts facilement',
+  static const List<OnboardingStepData> _steps = [
+    OnboardingStepData(
+      titleWhite: 'Trouvez les meilleurs\n',
+      titleOrange: 'départs facilement',
       description: 'Comparez plusieurs compagnies\net réservez en quelques étapes.',
-      imageAsset: AppConstants.passengerAsset,
     ),
-    OnboardingStep(
-      title: 'Voyagez en toute\nsérénité et sécurité',
-      description: 'Consultez les avis, les horaires en temps réel\net choisissez votre place.',
-      imageAsset: AppConstants.busAsset,
+    OnboardingStepData(
+      titleWhite: 'Comparez prix, horaires\n',
+      titleOrange: 'et confort',
+      description: 'Choisissez le programme qui\nvous convient le mieux.',
     ),
-    OnboardingStep(
-      title: 'Billet digitalisé\net paiement mobile',
-      description: 'Payez via Wave ou Orange Money\net embarquez avec votre QR Code.',
-      imageAsset: AppConstants.passengerAsset,
+    OnboardingStepData(
+      titleWhite: 'Réservez et voyagez\n',
+      titleOrange: 'en toute tranquillité',
+      description: 'Votre billet est toujours disponible\ndans l\'application.',
     ),
   ];
 
@@ -74,8 +80,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final step = _steps[_currentIndex];
+
     return Scaffold(
-      backgroundColor: SirayaColors.background,
+      backgroundColor: SirayaColors.splashGreen,
       body: SafeArea(
         child: Column(
           children: [
@@ -88,21 +96,29 @@ class _OnboardingPageState extends State<OnboardingPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: _onSkip,
-                    style: TextButton.styleFrom(
-                      foregroundColor: SirayaColors.textMuted,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: SirayaSpacing.sm,
-                        vertical: SirayaSpacing.xs,
+                  InkWell(
+                    onTap: _onSkip,
+                    borderRadius: BorderRadius.circular(SirayaSpacing.radiusFull),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0A3323),
+                        borderRadius: BorderRadius.circular(SirayaSpacing.radiusFull),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.1),
+                          width: 0.5,
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      'Passer',
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: SirayaColors.textMuted,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Text(
+                        'Passer',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white.withValues(alpha: 0.85),
+                        ),
                       ),
                     ),
                   ),
@@ -110,81 +126,86 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
             ),
 
-            // ── Carrousel d'étapes ───────────────────────────────────
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _steps.length,
-                onPageChanged: (index) {
-                  setState(() => _currentIndex = index);
-                },
-                itemBuilder: (context, index) {
-                  final step = _steps[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: SirayaSpacing.xl,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            // ── Titres & Descriptions bicolores ──────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: SirayaSpacing.xl,
+                vertical: SirayaSpacing.sm,
+              ),
+              child: Column(
+                children: [
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
                       children: [
-                        // Illustration
-                        Expanded(
-                          flex: 3,
-                          child: Center(
-                            child: Image.asset(
-                              step.imageAsset,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(
-                                Icons.directions_bus_rounded,
-                                size: 100,
-                                color: SirayaColors.green,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: SirayaSpacing.xl),
-
-                        // Titre
-                        Text(
-                          step.title,
-                          textAlign: TextAlign.center,
+                        TextSpan(
+                          text: step.titleWhite,
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
                             letterSpacing: -0.4,
                             height: 1.25,
-                            color: SirayaColors.textPrimary,
+                            color: Colors.white,
                           ),
                         ),
-                        const SizedBox(height: SirayaSpacing.md),
-
-                        // Description
-                        Text(
-                          step.description,
-                          textAlign: TextAlign.center,
+                        TextSpan(
+                          text: step.titleOrange,
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            height: 1.45,
-                            color: SirayaColors.textSecondary,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.4,
+                            height: 1.25,
+                            color: SirayaColors.orange,
                           ),
                         ),
-                        const Spacer(flex: 1),
                       ],
                     ),
-                  );
-                },
+                  ),
+                  const SizedBox(height: SirayaSpacing.xs + 2),
+                  Text(
+                    step.description,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 1.4,
+                      color: Colors.white.withValues(alpha: 0.75),
+                    ),
+                  ),
+                ],
               ),
             ),
 
-            // ── Pagination Dots & Bouton Suivant ─────────────────────
+            // ── Zone Carrousel / Contenu Visuel ──────────────────────
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() => _currentIndex = index);
+                },
+                children: [
+                  // Étape 1 : Bus Siraya
+                  _buildStep1Bus(),
+
+                  // Étape 2 : Cartes de comparaison
+                  _buildStep2ComparisonCards(),
+
+                  // Étape 3 : Passager & billet QR Code
+                  _buildStep3PassengerTicket(),
+                ],
+              ),
+            ),
+
+            // ── Stepper (Dots) & Bouton d'action ─────────────────────
             Padding(
-              padding: const EdgeInsets.all(SirayaSpacing.xl),
+              padding: const EdgeInsets.symmetric(
+                horizontal: SirayaSpacing.xl,
+                vertical: SirayaSpacing.md,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Indicateurs de pagination
+                  // Indicateurs de pagination (Dots)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(_steps.length, (index) {
@@ -192,12 +213,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       return AnimatedContainer(
                         duration: AppConstants.animationFast,
                         margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: isActive ? 24 : 8,
-                        height: 8,
+                        width: isActive ? 18 : 6,
+                        height: 6,
                         decoration: BoxDecoration(
                           color: isActive
                               ? SirayaColors.orange
-                              : SirayaColors.border,
+                              : Colors.white.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(
                             SirayaSpacing.radiusFull,
                           ),
@@ -205,19 +226,232 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       );
                     }),
                   ),
-                  const SizedBox(height: SirayaSpacing.xl),
+                  const SizedBox(height: SirayaSpacing.lg),
 
-                  // Bouton Suivant
-                  SirayaPrimaryButton(
-                    label: _currentIndex == _steps.length - 1
-                        ? 'Commencer'
-                        : 'Suivant',
-                    onPressed: _onNext,
+                  // Bouton Suivant / Commencer (Orange identitaire)
+                  SizedBox(
+                    width: double.infinity,
+                    height: SirayaSpacing.buttonHeight,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: SirayaColors.orange,
+                        foregroundColor: const Color(0xFF141F1A),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(SirayaSpacing.radiusMd),
+                        ),
+                        elevation: 0,
+                      ),
+                      onPressed: _onNext,
+                      child: Text(
+                        _currentIndex == _steps.length - 1
+                            ? 'Commencer'
+                            : 'Suivant',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.1,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  // ── Étape 1 : Bus Siraya ──────────────────────────────────────────
+  Widget _buildStep1Bus() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: SirayaSpacing.lg),
+        child: Image.asset(
+          AppConstants.busAsset,
+          fit: BoxFit.contain,
+          semanticLabel: 'Bus SIRAYA',
+          errorBuilder: (context, error, stackTrace) => const Icon(
+            Icons.directions_bus_rounded,
+            size: 110,
+            color: Colors.white70,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Étape 2 : Cartes de Comparaison ──────────────────────────────
+  Widget _buildStep2ComparisonCards() {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: SirayaSpacing.lg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildTripCard(
+              companyName: 'SENECAR',
+              departureTime: '06:00',
+              price: '65 000 FCFA',
+              comfortClass: 'Royal Class',
+              badgeColor: const Color(0xFF1B4332),
+            ),
+            const SizedBox(height: SirayaSpacing.sm),
+            _buildTripCard(
+              companyName: 'ORABUS',
+              departureTime: '06:00',
+              price: '',
+              comfortClass: 'Confort+',
+              badgeColor: const Color(0xFFE85D04),
+            ),
+            const SizedBox(height: SirayaSpacing.sm),
+            _buildTripCard(
+              companyName: 'MALI BUS',
+              departureTime: '06:00',
+              price: '70 000 FCFA',
+              comfortClass: 'Royal Class',
+              badgeColor: const Color(0xFF2D6A4F),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTripCard({
+    required String companyName,
+    required String departureTime,
+    required String price,
+    required String comfortClass,
+    required Color badgeColor,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(SirayaSpacing.radiusLg),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SirayaSpacing.md,
+        vertical: SirayaSpacing.sm + 2,
+      ),
+      child: Row(
+        children: [
+          // Logo compagnie / Avatar
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: badgeColor.withValues(alpha: 0.15),
+              border: Border.all(color: badgeColor, width: 1.5),
+            ),
+            child: Center(
+              child: Icon(
+                Icons.directions_bus_filled_rounded,
+                size: 22,
+                color: badgeColor,
+              ),
+            ),
+          ),
+          const SizedBox(width: SirayaSpacing.md),
+
+          // Heure et Compagnie
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  departureTime,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: SirayaColors.textMuted,
+                  ),
+                ),
+                Text(
+                  companyName,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.2,
+                    color: SirayaColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.air_rounded,
+                      size: 13,
+                      color: SirayaColors.textMuted.withValues(alpha: 0.8),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.wifi_rounded,
+                      size: 13,
+                      color: SirayaColors.textMuted.withValues(alpha: 0.8),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Prix et Confort
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (price.isNotEmpty)
+                Text(
+                  price,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.3,
+                    color: SirayaColors.textPrimary,
+                  ),
+                ),
+              const SizedBox(height: 2),
+              Text(
+                comfortClass,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: SirayaColors.textMuted,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Étape 3 : Passager & Billet QR Code ───────────────────────────
+  Widget _buildStep3PassengerTicket() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: SirayaSpacing.lg),
+        child: Image.asset(
+          AppConstants.passengerAsset,
+          fit: BoxFit.contain,
+          semanticLabel: 'Billet digitalisé et voyageur',
+          errorBuilder: (context, error, stackTrace) => const Icon(
+            Icons.qr_code_2_rounded,
+            size: 110,
+            color: Colors.white70,
+          ),
         ),
       ),
     );
