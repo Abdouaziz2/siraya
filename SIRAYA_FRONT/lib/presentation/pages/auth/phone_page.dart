@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nioudem/core/constants/siraya_countries.dart';
 import 'package:nioudem/core/theme/siraya_colors.dart';
 import 'package:nioudem/core/theme/siraya_spacing.dart';
 import 'package:nioudem/data/datasources/auth_remote_data_source.dart';
 import 'package:nioudem/data/repositories/auth_repository_impl.dart';
+import 'package:nioudem/domain/entities/country_entity.dart';
 import 'package:nioudem/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:nioudem/presentation/pages/auth/otp_page.dart';
+import 'package:nioudem/presentation/widgets/country_picker_bottom_sheet.dart';
 
 /// Écran 5 · Téléphone (création / connexion) — Node Figma `32:10322`
 ///
@@ -13,17 +16,19 @@ import 'package:nioudem/presentation/pages/auth/otp_page.dart';
 /// - Fond vert sombre (#003522)
 /// - En-tête : "Bienvenue sur SIRAYA" (bold 25) + "Entrez votre numéro de téléphone..."
 /// - Formulaire (#FCF9F4) avec coins arrondis supérieurs 28dp
-/// - Champ Pays avec drapeau Sénégal (+221)
-/// - Champ Numéro de téléphone (bold 20)
+/// - Champ Pays dynamique avec liste déroulante (Sénégal +221, Mali, Côte d'Ivoire, etc.)
+/// - Champ Numéro de téléphone (bold 18)
 /// - Bouton "Recevoir le code" (#FF7900)
 /// - Mentions légales en bas
 class PhonePage extends StatefulWidget {
   const PhonePage({
     super.key,
     this.sendOtpUseCase,
+    this.initialCountry = SirayaCountries.senegal,
   });
 
   final SendOtpUseCase? sendOtpUseCase;
+  final CountryEntity initialCountry;
 
   @override
   State<PhonePage> createState() => _PhonePageState();
@@ -31,12 +36,14 @@ class PhonePage extends StatefulWidget {
 
 class _PhonePageState extends State<PhonePage> {
   final TextEditingController _phoneController = TextEditingController(text: '77 123 45 67');
+  late CountryEntity _selectedCountry;
   bool _isLoading = false;
   late final SendOtpUseCase _sendOtpUseCase;
 
   @override
   void initState() {
     super.initState();
+    _selectedCountry = widget.initialCountry;
     _sendOtpUseCase = widget.sendOtpUseCase ??
         SendOtpUseCase(AuthRepositoryImpl(FirebaseAuthRemoteDataSourceImpl()));
   }
@@ -47,14 +54,30 @@ class _PhonePageState extends State<PhonePage> {
     super.dispose();
   }
 
+  Future<void> _openCountryPicker() async {
+    final picked = await CountryPickerBottomSheet.show(
+      context,
+      currentCountry: _selectedCountry,
+    );
+
+    if (picked != null && picked != _selectedCountry) {
+      setState(() {
+        _selectedCountry = picked;
+        _phoneController.text = ''; // Réinitialise pour le nouveau pays
+      });
+    }
+  }
+
   Future<void> _onSubmit() async {
     final rawPhone = _phoneController.text.trim();
     final cleanPhone = rawPhone.replaceAll(RegExp(r'\s+'), '');
 
-    if (cleanPhone.isEmpty || cleanPhone.length < 8) {
+    if (cleanPhone.isEmpty || cleanPhone.length < _selectedCountry.minLength) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Veuillez saisir un numéro de téléphone valide.'),
+        SnackBar(
+          content: Text(
+            'Veuillez saisir un numéro valide (ex: ${_selectedCountry.exampleNumber}).',
+          ),
           backgroundColor: SirayaColors.error,
         ),
       );
@@ -63,8 +86,10 @@ class _PhonePageState extends State<PhonePage> {
 
     setState(() => _isLoading = true);
 
-    // Format complet avec indicatif pays
-    final fullNumber = cleanPhone.startsWith('+') ? cleanPhone : '+221$cleanPhone';
+    // Format complet international avec indicatif pays sélectionné
+    final fullNumber = cleanPhone.startsWith('+')
+        ? cleanPhone
+        : '${_selectedCountry.dialCode}$cleanPhone';
 
     try {
       await _sendOtpUseCase.call(
@@ -164,7 +189,7 @@ class _PhonePageState extends State<PhonePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 1. Champ Pays
+                      // 1. Champ Pays dynamique
                       Text(
                         'Pays',
                         style: GoogleFonts.plusJakartaSans(
@@ -287,41 +312,51 @@ class _PhonePageState extends State<PhonePage> {
     );
   }
 
-  // ── Widget Champ Pays (Sénégal +221 avec drapeau) ───────────────────
+  // ── Widget Champ Pays (Sélecteur Dynamique) ─────────────────────────
   Widget _buildCountryField() {
-    return Container(
-      height: 52,
-      padding: const EdgeInsets.symmetric(horizontal: SirayaSpacing.md),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-      ),
-      child: Row(
-        children: [
-          // Drapeau Sénégal (Vert, Jaune + Étoile verte, Rouge)
-          _buildSenegalFlag(),
-          const SizedBox(width: SirayaSpacing.md),
+    return InkWell(
+      onTap: _openCountryPicker,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: SirayaSpacing.md),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFE5E7EB)),
+        ),
+        child: Row(
+          children: [
+            // Drapeau (Vectoriel pour Sénégal, Emoji pour les autres)
+            if (_selectedCountry.isoCode == 'SN')
+              _buildSenegalFlag()
+            else
+              Text(
+                _selectedCountry.flagEmoji,
+                style: const TextStyle(fontSize: 22),
+              ),
+            const SizedBox(width: SirayaSpacing.md),
 
-          // Texte Pays + Indicatif
-          Expanded(
-            child: Text(
-              'Sénégal (+221)',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF141F1A),
+            // Texte Pays + Indicatif
+            Expanded(
+              child: Text(
+                _selectedCountry.displayName,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF141F1A),
+                ),
               ),
             ),
-          ),
 
-          // Chevron déroulant
-          const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Color(0xFF4B5563),
-            size: 24,
-          ),
-        ],
+            // Chevron déroulant
+            const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: Color(0xFF4B5563),
+              size: 24,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -388,7 +423,7 @@ class _PhonePageState extends State<PhonePage> {
             focusedBorder: InputBorder.none,
             contentPadding: EdgeInsets.zero,
             isDense: true,
-            hintText: '77 123 45 67',
+            hintText: _selectedCountry.exampleNumber,
             hintStyle: GoogleFonts.plusJakartaSans(
               fontSize: 18,
               fontWeight: FontWeight.w700,

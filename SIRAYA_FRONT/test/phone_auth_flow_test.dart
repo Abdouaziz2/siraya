@@ -27,12 +27,39 @@ void main() {
     await tester.tap(find.text('Recevoir le code'));
     await tester.pump();
 
-    // Attente de la simulation de test (600ms)
-    await tester.pump(const Duration(milliseconds: 700));
+    // Attente de la simulation de test (300ms)
+    await tester.pump(const Duration(milliseconds: 600));
     await tester.pumpAndSettle();
 
     // 3. Navigation réussie vers OtpPage
     expect(find.byType(OtpPage), findsOneWidget);
     expect(find.text('Vérifiez votre numéro'), findsOneWidget);
+  });
+
+  testWidgets('PhonePage dynamic country picker allows selecting Mali (+223)', (tester) async {
+    final authDataSource = FirebaseAuthRemoteDataSourceImpl();
+    final authRepo = AuthRepositoryImpl(authDataSource);
+    final sendOtpUseCase = SendOtpUseCase(authRepo);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PhonePage(sendOtpUseCase: sendOtpUseCase),
+      ),
+    );
+
+    // Ouvre le bottom sheet des pays
+    await tester.tap(find.text('Sénégal (+221)'));
+    await tester.pumpAndSettle();
+
+    // Vérifie que le modal est ouvert
+    expect(find.text('Sélectionnez un pays'), findsOneWidget);
+    expect(find.text('Mali'), findsOneWidget);
+
+    // Sélectionne Mali
+    await tester.tap(find.text('Mali'));
+    await tester.pumpAndSettle();
+
+    // Vérifie la mise à jour dynamique
+    expect(find.text('Mali (+223)'), findsOneWidget);
   });
 }
