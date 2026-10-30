@@ -9,6 +9,7 @@ abstract class SirayaColors {
   static const Color splashGreen = Color(0xFF003C28); // Fond splash screen (Figma node 102:2)
   static const Color orange = Color(0xFFF27420);      // Orange identitaire vif (y, a, pin bus)
   static const Color darkOrange = Color(0xFFC6550A);  // Orange soutenu pour contraste texte
+  static const Color orangeDeep = Color(0xFFA94700);  // Orange profond Figma (#A94700)
 
   // Surfaces & Arrière-plans
   static const Color background = Color(0xFFF8F5EE);  // Fond cassé doux anti-éblouissement

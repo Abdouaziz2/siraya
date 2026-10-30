@@ -20,3 +20,4 @@ class CountryEntity {
 
   String get displayName => '$name ($dialCode)';
 }
+

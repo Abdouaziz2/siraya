@@ -6,9 +6,20 @@ import 'package:nioudem/core/theme/siraya_spacing.dart';
 import 'package:nioudem/data/datasources/auth_remote_data_source.dart';
 import 'package:nioudem/data/repositories/auth_repository_impl.dart';
 import 'package:nioudem/domain/usecases/auth/verify_otp_usecase.dart';
-import 'package:nioudem/presentation/pages/home/home_page.dart';
+import 'package:nioudem/presentation/pages/auth/register_page.dart';
 
 /// Écran 6 · Vérification OTP — Node Figma `32:10352`
+///
+/// Design Figma :
+/// - Fond vert sombre (#003522)
+/// - Conteneur blanc/crème (#FCF9F4) avec coins arrondis 30dp
+/// - Titre "Vérifiez votre numéro" (#003C28, bold 26)
+/// - "Nous avons envoyé un code à" + Numéro en gras (#222923)
+/// - 6 cases OTP (Radius 8, bold 28)
+/// - "Code expire dans 01:45" (#A94700)
+/// - "Disponible dans 00:45" / "Renvoyer le code"
+/// - Bouton "Vérifier" (#FF7900)
+/// - Lien "Modifier le numéro" (#003C28)
 class OtpPage extends StatefulWidget {
   const OtpPage({
     super.key,
@@ -32,6 +43,7 @@ class _OtpPageState extends State<OtpPage> {
   late final VerifyOtpUseCase _verifyOtpUseCase;
 
   int _resendCountdown = 45;
+  int _expireCountdown = 105; // 01:45
   Timer? _timer;
 
   @override
@@ -40,7 +52,7 @@ class _OtpPageState extends State<OtpPage> {
     _verifyOtpUseCase = widget.verifyOtpUseCase ??
         VerifyOtpUseCase(AuthRepositoryImpl(FirebaseAuthRemoteDataSourceImpl()));
 
-    // Pré-remplir avec le code de test 123456 si numéro de test
+    // Pré-remplissage du code de test 123456 pour fluidifier les tests
     if (widget.verificationId.startsWith('test-verification-id')) {
       const testCode = '123456';
       for (int i = 0; i < testCode.length; i++) {
@@ -48,18 +60,23 @@ class _OtpPageState extends State<OtpPage> {
       }
     }
 
-    _startCountdown();
+    _startTimers();
   }
 
-  void _startCountdown() {
+  void _startTimers() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) return;
-      if (_resendCountdown > 0) {
-        setState(() => _resendCountdown--);
-      } else {
-        _timer?.cancel();
-      }
+      setState(() {
+        if (_resendCountdown > 0) _resendCountdown--;
+        if (_expireCountdown > 0) _expireCountdown--;
+      });
     });
+  }
+
+  String _formatTimer(int seconds) {
+    final m = seconds ~/ 60;
+    final s = seconds % 60;
+    return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -98,10 +115,11 @@ class _OtpPageState extends State<OtpPage> {
       setState(() => _isLoading = false);
 
       if (user != null) {
-        // Redirection vers l'Accueil
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomePage()),
-          (route) => false,
+        // Redirection vers l'Écran 8 (Compléter le profil) ou Accueil
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => RegisterPage(phone: widget.phoneNumber),
+          ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -131,74 +149,79 @@ class _OtpPageState extends State<OtpPage> {
         bottom: false,
         child: Column(
           children: [
-            // ── En-tête ──────────────────────────────────────────────
+            // Barre supérieure (Bouton retour)
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                SirayaSpacing.xl,
-                SirayaSpacing.md,
-                SirayaSpacing.xl,
-                SirayaSpacing.xl,
+              padding: const EdgeInsets.symmetric(
+                horizontal: SirayaSpacing.lg,
+                vertical: SirayaSpacing.xs,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
                   IconButton(
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.centerLeft,
-                  ),
-                  const SizedBox(height: SirayaSpacing.xs),
-                  Text(
-                    'Vérifiez votre numéro',
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: SirayaSpacing.xs),
-                  Text(
-                    'Nous avons envoyé un code au\n${widget.phoneNumber}',
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white.withValues(alpha: 0.85),
-                      height: 1.35,
-                    ),
                   ),
                 ],
               ),
             ),
 
-            // ── Formulaire OTP (#FCF9F4) ─────────────────────────────
+            // Conteneur principal (#FCF9F4)
             Expanded(
               child: Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Color(0xFFFCF9F4),
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(28),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: SirayaSpacing.xl,
-                  vertical: SirayaSpacing.xxl,
+                  vertical: SirayaSpacing.xl,
                 ),
                 child: Column(
                   children: [
-                    // Cases OTP
+                    // Titre & Instructions
+                    Text(
+                      'Vérifiez votre numéro',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF003C28),
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    const SizedBox(height: SirayaSpacing.sm),
+                    Text(
+                      'Nous avons envoyé un code à',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF222923),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      widget.phoneNumber,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 21,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF222923),
+                      ),
+                    ),
+
+                    const SizedBox(height: SirayaSpacing.xxl),
+
+                    // 6 Cases OTP
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List.generate(6, (index) {
                         return Container(
-                          width: 44,
-                          height: 52,
+                          width: 46,
+                          height: 56,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: const Color(0xFFE5E7EB),
+                              color: const Color(0xFFD1D5DB),
                               width: 1.5,
                             ),
                           ),
@@ -210,14 +233,15 @@ class _OtpPageState extends State<OtpPage> {
                               keyboardType: TextInputType.number,
                               maxLength: 1,
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 20,
+                                fontSize: 26,
                                 fontWeight: FontWeight.w700,
-                                color: const Color(0xFF141F1A),
+                                color: const Color(0xFF222923),
                               ),
                               decoration: const InputDecoration(
                                 counterText: '',
                                 border: InputBorder.none,
                                 isDense: true,
+                                contentPadding: EdgeInsets.zero,
                               ),
                               onChanged: (val) {
                                 if (val.isNotEmpty && index < 5) {
@@ -234,33 +258,45 @@ class _OtpPageState extends State<OtpPage> {
 
                     const SizedBox(height: SirayaSpacing.lg),
 
-                    // Expiration & Renvoi
+                    // Expiration du code (#A94700)
                     Text(
-                      _resendCountdown > 0
-                          ? 'Disponible dans 00:${_resendCountdown.toString().padLeft(2, '0')}'
-                          : 'Vous n\'avez pas reçu le code ?',
+                      'Code expire dans ${_formatTimer(_expireCountdown)}',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        color: const Color(0xFF4B5563),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFFA94700),
                       ),
                     ),
-                    if (_resendCountdown == 0) ...[
-                      const SizedBox(height: 4),
+
+                    const SizedBox(height: SirayaSpacing.xs),
+
+                    // Renvoi du code
+                    if (_resendCountdown > 0)
+                      Text(
+                        'Disponible dans ${_formatTimer(_resendCountdown)}',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF4B5563),
+                        ),
+                      )
+                    else
                       TextButton(
                         onPressed: () {
-                          setState(() => _resendCountdown = 45);
-                          _startCountdown();
+                          setState(() {
+                            _resendCountdown = 45;
+                            _expireCountdown = 105;
+                          });
                         },
                         child: Text(
                           'Renvoyer le code',
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 14,
+                            fontSize: 15,
                             fontWeight: FontWeight.w700,
-                            color: SirayaColors.green,
+                            color: const Color(0xFF003C28),
                           ),
                         ),
                       ),
-                    ],
 
                     const Spacer(),
 
@@ -271,7 +307,7 @@ class _OtpPageState extends State<OtpPage> {
                       child: FilledButton(
                         style: FilledButton.styleFrom(
                           backgroundColor: const Color(0xFFFF7900),
-                          foregroundColor: Colors.white,
+                          foregroundColor: const Color(0xFF003522),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(11),
                           ),
@@ -290,7 +326,7 @@ class _OtpPageState extends State<OtpPage> {
                             : Text(
                                 'Vérifier',
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 18,
+                                  fontSize: 19,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                 ),
@@ -300,15 +336,15 @@ class _OtpPageState extends State<OtpPage> {
 
                     const SizedBox(height: SirayaSpacing.sm),
 
-                    // Modifier le numéro
+                    // Lien Modifier le numéro
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(
                         'Modifier le numéro',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF4B5563),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF003C28),
                         ),
                       ),
                     ),

@@ -20,4 +20,10 @@ abstract class AppConstants {
   static const String logoWhiteAsset = 'assets/images/Siraya-logo.png';
   static const String logoGreenAsset = 'assets/images/siraya_logo_green.png';
   static const String passengerAsset = 'assets/images/passenger_siraya.png';
+
+  // Compagnies partenaires logos
+  static const String logoSenecar = 'assets/images/logo_senecar.png';
+  static const String logoOrabus = 'assets/images/logo_orabus.png';
+  static const String logoMaliBus = 'assets/images/logo_malibus.png';
+  static const String logoSahel = 'assets/images/logo_sahel.png';
 }

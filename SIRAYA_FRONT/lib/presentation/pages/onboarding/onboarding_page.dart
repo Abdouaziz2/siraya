@@ -297,6 +297,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               price: '65 000 FCFA',
               comfortClass: 'Royal Class',
               badgeColor: const Color(0xFF1B4332),
+              logoAsset: 'assets/images/logo_senecar.png',
             ),
             const SizedBox(height: SirayaSpacing.sm),
             _buildTripCard(
@@ -305,6 +306,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               price: '',
               comfortClass: 'Confort+',
               badgeColor: const Color(0xFFE85D04),
+              logoAsset: 'assets/images/logo_orabus.png',
             ),
             const SizedBox(height: SirayaSpacing.sm),
             _buildTripCard(
@@ -313,6 +315,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               price: '70 000 FCFA',
               comfortClass: 'Royal Class',
               badgeColor: const Color(0xFF2D6A4F),
+              logoAsset: 'assets/images/logo_malibus.png',
             ),
           ],
         ),
@@ -326,6 +329,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     required String price,
     required String comfortClass,
     required Color badgeColor,
+    String? logoAsset,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -354,13 +358,26 @@ class _OnboardingPageState extends State<OnboardingPage> {
               color: badgeColor.withValues(alpha: 0.15),
               border: Border.all(color: badgeColor, width: 1.5),
             ),
-            child: Center(
-              child: Icon(
-                Icons.directions_bus_filled_rounded,
-                size: 22,
-                color: badgeColor,
-              ),
-            ),
+            clipBehavior: Clip.antiAlias,
+            child: logoAsset != null
+                ? Image.asset(
+                    logoAsset,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Center(
+                      child: Icon(
+                        Icons.directions_bus_filled_rounded,
+                        size: 22,
+                        color: badgeColor,
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: Icon(
+                      Icons.directions_bus_filled_rounded,
+                      size: 22,
+                      color: badgeColor,
+                    ),
+                  ),
           ),
           const SizedBox(width: SirayaSpacing.md),
 
